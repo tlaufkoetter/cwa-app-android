@@ -38,7 +38,7 @@ class SubmissionResultPositiveOtherWarningViewModel @AssistedInject constructor(
 
     private var currentSubmissionRequestId: UUID? = null
     private val currentSubmission = taskController.tasks
-           .map { it.find { taskInfo -> taskInfo.taskState.request.id == currentSubmissionRequestId }?.taskState }
+                .map { it.find { taskInfo -> taskInfo.taskState.request.id == currentSubmissionRequestId }?.taskState }
     private val submissionState = currentSubmission
         .map { taskState ->
             when {
