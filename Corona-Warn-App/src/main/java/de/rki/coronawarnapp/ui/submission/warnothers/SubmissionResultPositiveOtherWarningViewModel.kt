@@ -38,16 +38,16 @@ class SubmissionResultPositiveOtherWarningViewModel @AssistedInject constructor(
 
     private var currentSubmissionRequestId: UUID? = null
     private val currentSubmission = taskController.tasks
-            .map { it.find { taskInfo -> taskInfo.taskState.type == SubmissionTask::class }?.taskState }
+           .map { it.find { taskInfo -> taskInfo.taskState.request.id == currentSubmissionRequestId }?.taskState }
     private val submissionState = currentSubmission
-            .map { taskState ->
-                when {
-                    taskState == null -> ApiRequestState.IDLE
-                    taskState.isFailed -> ApiRequestState.FAILED.also { updateUI(taskState) }
-                    taskState.isFinished -> ApiRequestState.SUCCESS.also { updateUI(taskState) }
-                    else -> ApiRequestState.STARTED
-                }
+        .map { taskState ->
+            when {
+                taskState == null -> ApiRequestState.IDLE
+                taskState.isFailed -> ApiRequestState.FAILED.also { updateUI(taskState) }
+                taskState.isFinished -> ApiRequestState.SUCCESS.also { updateUI(taskState) }
+                else -> ApiRequestState.STARTED
             }
+        }
     val submissionError = SingleLiveEvent<Throwable>()
 
     val uiState = combineTransform(
@@ -66,15 +66,12 @@ class SubmissionResultPositiveOtherWarningViewModel @AssistedInject constructor(
     val showEnableTracingEvent = SingleLiveEvent<Unit>()
 
     private fun updateUI(taskState: TaskState) {
-        if (taskState.request.id == currentSubmissionRequestId) {
-            currentSubmissionRequestId = null
             when {
                 taskState.isFailed ->
                     submissionError.postValue(taskState.error ?: return)
                 taskState.isSuccessful ->
                     routeToScreen.postValue(SubmissionNavigationEvents.NavigateToSubmissionDone)
             }
-        }
     }
 
     fun onBackPressed() {
