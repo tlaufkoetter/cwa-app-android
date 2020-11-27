@@ -31,6 +31,7 @@ class SubmissionTestResultViewModel @AssistedInject constructor(
     val routeToScreen: SingleLiveEvent<SubmissionNavigationEvents> = SingleLiveEvent()
     val showTracingRequiredScreen = SingleLiveEvent<Unit>()
     val showRedeemedTokenWarning = SingleLiveEvent<Unit>()
+    val consent = submissionRepository.hasGivenConsentToSubmission.asLiveData(dispatcherProvider.Default)
 
     private var wasRedeemedTokenErrorShown = false
     private val tokenErrorMutex = Mutex()

@@ -18,7 +18,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_normal">
 
             <include
                 android:id="@+id/submission_test_result_card"
@@ -56,6 +57,18 @@
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/submission_test_result_subtitle" />
+
+            <de.rki.coronawarnapp.ui.submission.consentstatus.ConsentStatusView
+                android:id="@+id/consent_status"
+                android:layout_width="@dimen/match_constraint"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:focusable="true"
+                android:visibility="@{FormatterSubmissionHelper.formatTestResultPendingStepsVisible(uiState.deviceUiState)}"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/submission_test_result_pending_steps" />
 
             <include
                 android:id="@+id/submission_test_result_negative_steps"

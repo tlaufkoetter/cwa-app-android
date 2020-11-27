@@ -134,6 +134,10 @@ class SubmissionTestResultFragment : Fragment(R.layout.fragment_submission_test_
         }
 
         viewModel.observeTestResultToSchedulePositiveTestResultReminder()
+
+        viewModel.consent.observe2(this) {
+            binding.submissionTestResultContent.consentStatus.updateConsent(it)
+        }
     }
 
     override fun onResume() {
