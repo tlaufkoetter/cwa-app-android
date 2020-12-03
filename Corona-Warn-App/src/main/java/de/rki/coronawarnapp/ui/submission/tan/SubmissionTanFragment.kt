@@ -55,7 +55,6 @@ class SubmissionTanFragment : Fragment(R.layout.fragment_submission_tan), AutoIn
         }
 
         binding.submissionTanButtonEnter.setOnClickListener {
-            // TODO navigation depending on test result and consent
             viewModel.onTanSubmit()
         }
         binding.submissionTanHeader.headerButtonBack.buttonIcon.setOnClickListener { goBack() }
@@ -68,7 +67,7 @@ class SubmissionTanFragment : Fragment(R.layout.fragment_submission_tan), AutoIn
 
             if (ApiRequestState.SUCCESS == it) {
                 doNavigate(
-                    SubmissionTanFragmentDirections.actionSubmissionTanFragmentToSubmissionResultFragment()
+                    SubmissionTanFragmentDirections.actionSubmissionTanFragmentToSubmissionTestResultNoConsentFragment()
                 )
             }
         }

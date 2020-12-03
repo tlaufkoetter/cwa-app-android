@@ -38,7 +38,7 @@ class SubmissionTestResultNoConsentFragment : Fragment(R.layout.fragment_submiss
             showCancelDialog()
         }
         binding.submissionTestResultPositiveNoConsentButtonWarnOthers.setOnClickListener {
-            // TODO navigation
+            navigateToWarnOthers()
         }
     }
 
