@@ -51,9 +51,8 @@ class DataReset @Inject constructor(
     private val submissionRepository: SubmissionRepository,
     private val exposureDetectionTracker: ExposureDetectionTracker,
     private val riskLevelStorage: RiskLevelStorage,
-    private val contactDiaryDatabase: ContactDiaryDatabase
+    private val contactDiaryDatabase: ContactDiaryDatabase,
     private val downloadDiagnosisKeysSettings: DownloadDiagnosisKeysSettings,
-    private val riskLevelStorage: RiskLevelStorage
 
 ) {
 
