@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "857201ec8eba4f3c64ca96c8975ceb69",
+    "identityHash": "02f231d9ba162399bf1884e74266fa0e",
     "entities": [
       {
-        "tableName": "locations",
+        "tableName": "ContactDiaryLocationEntity",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`locationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `locationName` TEXT NOT NULL)",
         "fields": [
           {
@@ -31,8 +31,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "locationvisits",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `fkLocationId` INTEGER NOT NULL, FOREIGN KEY(`fkLocationId`) REFERENCES `locations`(`locationId`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "tableName": "ContactDiaryLocationVisitEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `fkLocationId` INTEGER NOT NULL, FOREIGN KEY(`fkLocationId`) REFERENCES `ContactDiaryLocationEntity`(`locationId`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
         "fields": [
           {
             "fieldPath": "id",
@@ -59,19 +59,10 @@
           ],
           "autoGenerate": true
         },
-        "indices": [
-          {
-            "name": "index_locationvisits_fkLocationId",
-            "unique": false,
-            "columnNames": [
-              "fkLocationId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_locationvisits_fkLocationId` ON `${TABLE_NAME}` (`fkLocationId`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": [
           {
-            "table": "locations",
+            "table": "ContactDiaryLocationEntity",
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
@@ -84,7 +75,7 @@
         ]
       },
       {
-        "tableName": "persons",
+        "tableName": "ContactDiaryPersonEntity",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`personId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT NOT NULL)",
         "fields": [
           {
@@ -110,8 +101,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "personencounters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `fkPersonId` INTEGER NOT NULL, FOREIGN KEY(`fkPersonId`) REFERENCES `persons`(`personId`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "tableName": "ContactDiaryPersonEncounterEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `fkPersonId` INTEGER NOT NULL, FOREIGN KEY(`fkPersonId`) REFERENCES `ContactDiaryPersonEntity`(`personId`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
         "fields": [
           {
             "fieldPath": "id",
@@ -138,19 +129,10 @@
           ],
           "autoGenerate": true
         },
-        "indices": [
-          {
-            "name": "index_personencounters_fkPersonId",
-            "unique": false,
-            "columnNames": [
-              "fkPersonId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_personencounters_fkPersonId` ON `${TABLE_NAME}` (`fkPersonId`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": [
           {
-            "table": "persons",
+            "table": "ContactDiaryPersonEntity",
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
@@ -166,7 +148,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '857201ec8eba4f3c64ca96c8975ceb69')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02f231d9ba162399bf1884e74266fa0e')"
     ]
   }
 }
