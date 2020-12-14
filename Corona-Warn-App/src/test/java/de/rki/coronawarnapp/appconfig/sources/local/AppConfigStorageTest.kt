@@ -131,26 +131,6 @@ class AppConfigStorageTest : BaseIOTest() {
     }
 
     @Test
-    fun `nulling deletes legacy config`() = runBlockingTest {
-        val storage = createStorage()
-        configPath.exists() shouldBe false
-
-        storage.getStoredConfig() shouldBe null
-        storage.setStoredConfig(null)
-        configPath.exists() shouldBe false
-
-        legacyConfigPath.exists() shouldBe false
-        legacyConfigPath.parentFile!!.mkdirs()
-        legacyConfigPath.writeBytes(APPCONFIG_RAW)
-        legacyConfigPath.exists() shouldBe true
-
-        storage.setStoredConfig(null)
-        storage.getStoredConfig() shouldBe null
-        configPath.exists() shouldBe false
-        legacyConfigPath.exists() shouldBe false
-    }
-
-    @Test
     fun `if no fallback exists, but we have a legacy config, use that`() = runBlockingTest {
         configPath.exists() shouldBe false
         legacyConfigPath.exists() shouldBe false
@@ -162,10 +142,10 @@ class AppConfigStorageTest : BaseIOTest() {
 
         storage.getStoredConfig() shouldBe InternalConfigData(
             rawData = APPCONFIG_RAW,
-            serverTime = Instant.ofEpochMilli(legacyConfigPath.lastModified()),
+            serverTime = Instant.ofEpochMilli(1234),
             localOffset = Duration.ZERO,
             etag = "I am an ETag :)!",
-            cacheValidity = Duration.standardSeconds(0)
+            cacheValidity = Duration.standardMinutes(5)
         )
     }
 

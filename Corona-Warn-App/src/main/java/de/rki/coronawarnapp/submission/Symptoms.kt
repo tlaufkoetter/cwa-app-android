@@ -1,12 +1,10 @@
 package de.rki.coronawarnapp.submission
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 
-@Keep
 @Parcelize
 data class Symptoms(
     /**
@@ -16,7 +14,6 @@ data class Symptoms(
     val symptomIndication: Indication
 ) : Parcelable {
 
-    @Keep
     sealed class StartOf : Parcelable {
         @Parcelize
         data class Date(val date: LocalDate) : StartOf()
@@ -50,7 +47,6 @@ data class Symptoms(
         }
     }
 
-    @Keep
     @Parcelize
     enum class Indication : Parcelable {
         @SerializedName("POSITIVE")

@@ -3,7 +3,6 @@ package de.rki.coronawarnapp.ui.tracing.settings
 import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.squareup.inject.assisted.AssistedInject
@@ -51,24 +50,12 @@ class SettingsTracingFragmentViewModel @AssistedInject constructor(
 
     val events = SingleLiveEvent<Event>()
 
-    val isTracingSwitchChecked = MediatorLiveData<Boolean>().apply {
-        addSource(tracingSettingsState) {
-            value = it.isTracingSwitchChecked()
-        }
-    }
-
     init {
         tracingPermissionHelper.callback = object : TracingPermissionHelper.Callback {
             override fun onUpdateTracingStatus(isTracingEnabled: Boolean) {
                 if (isTracingEnabled) {
-                    // check if background processing is switched off,
-                    // if it is, show the manual calculation dialog explanation before turning on.
-                    if (!backgroundPrioritization.isBackgroundActivityPrioritized) {
-                        events.postValue(Event.ManualCheckingDialog)
-                    }
                     BackgroundWorkScheduler.startWorkScheduler()
                 }
-                isTracingSwitchChecked.postValue(isTracingEnabled)
             }
 
             override fun onError(error: Throwable) {
@@ -77,51 +64,38 @@ class SettingsTracingFragmentViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun turnTracingOff() {
-        InternalExposureNotificationClient.asyncStop()
-        BackgroundWorkScheduler.stopWorkScheduler()
-    }
-
-    fun requestTracingTurnedOn() {
-        tracingPermissionHelper.startTracing { permissionRequest ->
-            events.postValue(Event.RequestPermissions(permissionRequest))
-        }
-    }
-
-    fun onTracingToggled(isChecked: Boolean) {
-        try {
-            if (isChecked) {
-                onTracingTurnedOn()
-            } else {
-                onTracingTurnedOff()
-            }
-        } catch (exception: Exception) {
-            exception.report(
-                ExceptionCategory.EXPOSURENOTIFICATION,
-                SettingsTracingFragment.TAG,
-                null
-            )
-        }
-    }
-
-    fun onTracingTurnedOff() {
-        isTracingSwitchChecked.postValue(false)
+    fun startStopTracing() {
+        // if tracing is enabled when listener is activated it should be disabled
         launch {
-            if (InternalExposureNotificationClient.asyncIsEnabled()) {
-                turnTracingOff()
+            try {
+                if (InternalExposureNotificationClient.asyncIsEnabled()) {
+                    InternalExposureNotificationClient.asyncStop()
+                    BackgroundWorkScheduler.stopWorkScheduler()
+                } else {
+                    // tracing was already activated
+                    if (LocalData.initialTracingActivationTimestamp() != null) {
+                        tracingPermissionHelper.startTracing { permissionRequest ->
+                            events.postValue(Event.RequestPermissions(permissionRequest))
+                        }
+                    } else {
+                        // tracing was never activated
+                        // ask for consent via dialog for initial tracing activation when tracing was not
+                        // activated during onboarding
+                        events.postValue(Event.ShowConsentDialog)
+                        // check if background processing is switched off,
+                        // if it is, show the manual calculation dialog explanation before turning on.
+                        if (!backgroundPrioritization.isBackgroundActivityPrioritized) {
+                            events.postValue(Event.ManualCheckingDialog)
+                        }
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.report(
+                    ExceptionCategory.EXPOSURENOTIFICATION,
+                    SettingsTracingFragment.TAG,
+                    null
+                )
             }
-        }
-    }
-
-    private fun onTracingTurnedOn() {
-        // tracing was already activated
-        if (LocalData.initialTracingActivationTimestamp() != null) {
-            requestTracingTurnedOn()
-        } else {
-            // tracing was never activated
-            // ask for consent via dialog for initial tracing activation when tracing was not
-            // activated during onboarding
-            events.postValue(Event.ShowConsentDialog)
         }
     }
 

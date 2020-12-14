@@ -37,7 +37,7 @@ abstract class TEKHistoryDatabase : RoomDatabase() {
         @Query("SELECT * FROM tek_history")
         fun allEntries(): Flow<List<TEKEntryDao>>
 
-        @Insert(onConflict = OnConflictStrategy.IGNORE)
+        @Insert(onConflict = OnConflictStrategy.ABORT)
         suspend fun insertEntry(riskResultDao: TEKEntryDao)
     }
 

@@ -1,15 +1,17 @@
 package de.rki.coronawarnapp.ui.submission.symptoms.introduction
 
 import androidx.lifecycle.asLiveData
-import androidx.navigation.NavDirections
 import com.squareup.inject.assisted.AssistedInject
 import de.rki.coronawarnapp.storage.SubmissionRepository
 import de.rki.coronawarnapp.submission.Symptoms
+import de.rki.coronawarnapp.ui.submission.viewmodel.SubmissionNavigationEvents
+import de.rki.coronawarnapp.ui.submission.viewmodel.SubmissionNavigationEvents.NavigateToMainActivity
+import de.rki.coronawarnapp.ui.submission.viewmodel.SubmissionNavigationEvents.NavigateToSymptomCalendar
 import de.rki.coronawarnapp.util.coroutine.DispatcherProvider
 import de.rki.coronawarnapp.util.ui.SingleLiveEvent
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModel
 import de.rki.coronawarnapp.util.viewmodel.SimpleCWAViewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 class SubmissionSymptomIntroductionViewModel @AssistedInject constructor(
@@ -17,10 +19,11 @@ class SubmissionSymptomIntroductionViewModel @AssistedInject constructor(
     private val submissionRepository: SubmissionRepository
 ) : CWAViewModel(dispatcherProvider = dispatcherProvider) {
 
-    private val symptomIndicationInternal = MutableStateFlow<Symptoms.Indication?>(null)
-    val symptomIndication = symptomIndicationInternal.asLiveData(context = dispatcherProvider.Default)
+    val symptomIndication = submissionRepository.currentSymptoms.flow
+        .map { it?.symptomIndication }
+        .asLiveData(context = dispatcherProvider.Default)
 
-    val navigation = SingleLiveEvent<NavDirections>()
+    val routeToScreen: SingleLiveEvent<SubmissionNavigationEvents> = SingleLiveEvent()
 
     val showCancelDialog = SingleLiveEvent<Unit>()
     val showUploadDialog = submissionRepository.isSubmissionRunning
@@ -28,15 +31,8 @@ class SubmissionSymptomIntroductionViewModel @AssistedInject constructor(
 
     fun onNextClicked() {
         launch {
-            when (symptomIndicationInternal.value) {
-                Symptoms.Indication.POSITIVE -> {
-                    navigation.postValue(
-                        SubmissionSymptomIntroductionFragmentDirections
-                            .actionSubmissionSymptomIntroductionFragmentToSubmissionSymptomCalendarFragment(
-                                symptomIndication = Symptoms.Indication.POSITIVE
-                            )
-                    )
-                }
+            when (submissionRepository.currentSymptoms.value?.symptomIndication) {
+                Symptoms.Indication.POSITIVE -> routeToScreen.postValue(NavigateToSymptomCalendar)
                 Symptoms.Indication.NEGATIVE -> doSubmit()
                 Symptoms.Indication.NO_INFORMATION -> showCancelDialog.postValue(Unit)
             }
@@ -61,7 +57,9 @@ class SubmissionSymptomIntroductionViewModel @AssistedInject constructor(
 
     private fun updateSymptomIndication(indication: Symptoms.Indication) {
         Timber.d("updateSymptomIndication(indication=$indication)")
-        symptomIndicationInternal.value = indication
+        submissionRepository.currentSymptoms.update {
+            (it ?: Symptoms.NO_INFO_GIVEN).copy(symptomIndication = indication)
+        }
     }
 
     fun onCancelConfirmed() {
@@ -76,10 +74,7 @@ class SubmissionSymptomIntroductionViewModel @AssistedInject constructor(
             } catch (e: Exception) {
                 Timber.e(e, "doSubmit() failed.")
             } finally {
-                navigation.postValue(
-                    SubmissionSymptomIntroductionFragmentDirections
-                        .actionSubmissionSymptomIntroductionFragmentToMainFragment()
-                )
+                routeToScreen.postValue(NavigateToMainActivity)
             }
         }
     }

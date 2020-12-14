@@ -48,7 +48,6 @@ class CoronaWarnApplication : Application(), HasAndroidInjector {
     @Inject lateinit var configChangeDetector: ConfigChangeDetector
     @Inject lateinit var riskLevelChangeDetector: RiskLevelChangeDetector
     @Inject lateinit var deadmanNotificationScheduler: DeadmanNotificationScheduler
-    @Inject lateinit var notificationHelper: NotificationHelper
     @LogHistoryTree @Inject lateinit var rollingLogHistory: Timber.Tree
 
     override fun onCreate() {
@@ -63,7 +62,7 @@ class CoronaWarnApplication : Application(), HasAndroidInjector {
 
         Timber.v("onCreate(): WorkManager setup done: $workManager")
 
-        notificationHelper.createNotificationChannel()
+        NotificationHelper.createNotificationChannel()
 
         // Enable Conscrypt for TLS1.3 Support below API Level 29
         Security.insertProviderAt(Conscrypt.newProvider(), 1)

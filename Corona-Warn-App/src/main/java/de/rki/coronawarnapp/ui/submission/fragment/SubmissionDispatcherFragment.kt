@@ -59,13 +59,13 @@ class SubmissionDispatcherFragment : Fragment(R.layout.fragment_submission_dispa
         binding.submissionDispatcherHeader.headerButtonBack.buttonIcon.setOnClickListener {
             viewModel.onBackPressed()
         }
-        binding.submissionDispatcherQr.dispatcherCard.setOnClickListener {
+        binding.submissionDispatcherContent.submissionDispatcherQr.dispatcherCard.setOnClickListener {
             viewModel.onQRCodePressed()
         }
-        binding.submissionDispatcherTanCode.dispatcherCard.setOnClickListener {
+        binding.submissionDispatcherContent.submissionDispatcherTanCode.dispatcherCard.setOnClickListener {
             viewModel.onTanPressed()
         }
-        binding.submissionDispatcherTanTele.dispatcherCard.setOnClickListener {
+        binding.submissionDispatcherContent.submissionDispatcherTanTele.dispatcherCard.setOnClickListener {
             viewModel.onTeleTanPressed()
         }
     }

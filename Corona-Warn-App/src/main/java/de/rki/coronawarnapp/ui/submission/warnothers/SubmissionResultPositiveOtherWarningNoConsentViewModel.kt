@@ -31,8 +31,7 @@ class SubmissionResultPositiveOtherWarningNoConsentViewModel @AssistedInject con
 
     val showEnableTracingEvent = SingleLiveEvent<Unit>()
 
-    val countryList = interoperabilityRepository.countryList
-        .asLiveData(context = dispatcherProvider.Default)
+    val countryList = interoperabilityRepository.countryListFlow.asLiveData()
 
     init {
         tekHistoryUpdater.callback = object : TEKHistoryUpdater.Callback {
@@ -44,7 +43,10 @@ class SubmissionResultPositiveOtherWarningNoConsentViewModel @AssistedInject con
             }
 
             override fun onPermissionDeclined() {
-                // stay on screen
+                routeToScreen.postValue(
+                    SubmissionResultPositiveOtherWarningNoConsentFragmentDirections
+                        .actionSubmissionResultPositiveOtherWarningNoConsentFragmentToMainFragment()
+                )
             }
 
             override fun onError(error: Throwable) {

@@ -16,6 +16,8 @@ interface TEKHistoryProvider {
      */
     suspend fun getTEKHistory(): List<TemporaryExposureKey>
 
+    suspend fun isTEKAccessPermissionGranted(): Boolean
+
     suspend fun getTEKHistoryOrRequestPermission(
         onTEKHistoryAvailable: (List<TemporaryExposureKey>) -> Unit,
         onPermissionRequired: (Status) -> Unit

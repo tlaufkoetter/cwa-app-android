@@ -1,30 +1,28 @@
 package de.rki.coronawarnapp.ui.submission.symptoms.calendar
 
 import androidx.lifecycle.asLiveData
-import androidx.navigation.NavDirections
-import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import de.rki.coronawarnapp.bugreporting.reportProblem
 import de.rki.coronawarnapp.storage.SubmissionRepository
 import de.rki.coronawarnapp.submission.Symptoms
+import de.rki.coronawarnapp.ui.submission.viewmodel.SubmissionNavigationEvents
 import de.rki.coronawarnapp.util.coroutine.DispatcherProvider
 import de.rki.coronawarnapp.util.ui.SingleLiveEvent
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModel
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import org.joda.time.LocalDate
 import timber.log.Timber
 
 class SubmissionSymptomCalendarViewModel @AssistedInject constructor(
-    @Assisted val symptomIndication: Symptoms.Indication,
     dispatcherProvider: DispatcherProvider,
     private val submissionRepository: SubmissionRepository
 ) : CWAViewModel(dispatcherProvider = dispatcherProvider) {
 
-    private val symptomStartInternal = MutableStateFlow<Symptoms.StartOf?>(null)
-    val symptomStart = symptomStartInternal.asLiveData(context = dispatcherProvider.Default)
+    val symptomStart = submissionRepository.currentSymptoms.flow
+        .map { it?.startOfSymptoms }
+        .asLiveData(context = dispatcherProvider.Default)
 
-    val routeToScreen = SingleLiveEvent<NavDirections>()
+    val routeToScreen: SingleLiveEvent<SubmissionNavigationEvents> = SingleLiveEvent()
     val showCancelDialog = SingleLiveEvent<Unit>()
     val showUploadDialog = submissionRepository.isSubmissionRunning
         .asLiveData(context = dispatcherProvider.Default)
@@ -50,7 +48,9 @@ class SubmissionSymptomCalendarViewModel @AssistedInject constructor(
     }
 
     private fun updateSymptomStart(startOf: Symptoms.StartOf?) {
-        symptomStartInternal.value = startOf
+        submissionRepository.currentSymptoms.update {
+            (it ?: Symptoms.NO_INFO_GIVEN).copy(startOfSymptoms = startOf)
+        }
     }
 
     fun onCalendarPreviousClicked() {
@@ -58,18 +58,7 @@ class SubmissionSymptomCalendarViewModel @AssistedInject constructor(
     }
 
     fun onDone() {
-        if (symptomStartInternal.value == null) {
-            IllegalStateException("Can't finish symptom indication without symptomStart value.")
-                .reportProblem(tag = TAG, "UI should not allow symptom submission without start date.")
-            return
-        }
-        Timber.tag(TAG).d("onDone() clicked on calender screen.")
-        submissionRepository.currentSymptoms.update {
-            Symptoms(
-                symptomIndication = symptomIndication,
-                startOfSymptoms = symptomStartInternal.value
-            ).also { Timber.tag(TAG).v("Symptoms updated to %s", it) }
-        }
+        Timber.d("onDone() clicked on calender screen.")
         performSubmission()
     }
 
@@ -83,11 +72,9 @@ class SubmissionSymptomCalendarViewModel @AssistedInject constructor(
             try {
                 submissionRepository.startSubmission()
             } catch (e: Exception) {
-                Timber.tag(TAG).e(e, "performSubmission() failed.")
+                Timber.e(e, "performSubmission() failed.")
             } finally {
-                routeToScreen.postValue(
-                    SubmissionSymptomCalendarFragmentDirections.actionSubmissionSymptomCalendarFragmentToMainFragment()
-                )
+                routeToScreen.postValue(SubmissionNavigationEvents.NavigateToMainActivity)
             }
         }
     }
@@ -95,10 +82,6 @@ class SubmissionSymptomCalendarViewModel @AssistedInject constructor(
     @AssistedInject.Factory
     interface Factory : CWAViewModelFactory<SubmissionSymptomCalendarViewModel> {
 
-        fun create(symptomIndication: Symptoms.Indication): SubmissionSymptomCalendarViewModel
-    }
-
-    companion object {
-        private const val TAG = "SymptomsCalenderVM"
+        fun create(): SubmissionSymptomCalendarViewModel
     }
 }

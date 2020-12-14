@@ -7,10 +7,8 @@ import android.view.accessibility.AccessibilityEvent
 import androidx.fragment.app.Fragment
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentHomeBinding
-import de.rki.coronawarnapp.util.DeviceUIState
 import de.rki.coronawarnapp.util.DialogHelper
 import de.rki.coronawarnapp.util.ExternalActionHelper
-import de.rki.coronawarnapp.util.NetworkRequestWrapper
 import de.rki.coronawarnapp.util.di.AutoInject
 import de.rki.coronawarnapp.util.errors.RecoveryByResetDialogFactory
 import de.rki.coronawarnapp.util.ui.doNavigate
@@ -18,7 +16,6 @@ import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.viewBindingLazy
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
 import de.rki.coronawarnapp.util.viewmodel.cwaViewModels
-import kotlinx.android.synthetic.main.include_submission_status_card_ready.*
 import javax.inject.Inject
 
 /**
@@ -50,11 +47,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), AutoInject {
         }
         vm.submissionCardState.observe2(this) {
             binding.submissionCard = it
-
-            setupTestResultCard(it.deviceUiState)
         }
 
         setupToolbar()
+
+        setupTestResultCard()
 
         binding.mainTracing.setOnClickListener {
             doNavigate(HomeFragmentDirections.actionMainFragmentToSettingsTracingFragment())
@@ -139,53 +136,42 @@ class HomeFragment : Fragment(R.layout.fragment_home), AutoInject {
         }
     }
 
-    private fun setupTestResultCard(deviceUiState: NetworkRequestWrapper<DeviceUIState, Throwable>) {
-        binding.mainTestUnregistered.apply {
-            val navDirection = HomeFragmentDirections.actionMainFragmentToSubmissionDispatcher()
-            submissionStatusCardUnregistered.setOnClickListener { doNavigate(navDirection) }
-            submissionStatusCardUnregisteredButton.setOnClickListener { doNavigate(navDirection) }
-        }
+    private fun setupTestResultCard() {
+        binding.apply {
 
-        // Test is not positive (pending, negative, invalid)
-        binding.mainTestResult.apply {
-            val navDirection = if (deviceUiState is NetworkRequestWrapper.RequestSuccessful) {
-                when (deviceUiState.data) {
-                    DeviceUIState.PAIRED_NEGATIVE -> HomeFragmentDirections
-                        .actionMainFragmentToSubmissionTestResultNegativeFragment()
-                    DeviceUIState.PAIRED_ERROR,
-                    DeviceUIState.PAIRED_REDEEMED -> HomeFragmentDirections
-                        .actionMainFragmentToSubmissionTestResultInvalidFragment()
-                    else -> HomeFragmentDirections
-                        .actionMainFragmentToSubmissionTestResultPendingFragment()
+            mainTestUnregistered.apply {
+                val toSubmissionDispatcher = {
+                    doNavigate(HomeFragmentDirections.actionMainFragmentToSubmissionDispatcher())
                 }
-            } else {
-                HomeFragmentDirections.actionMainFragmentToSubmissionTestResultPendingFragment()
+                submissionStatusCardUnregistered.setOnClickListener { toSubmissionDispatcher() }
+                submissionStatusCardUnregisteredButton.setOnClickListener { toSubmissionDispatcher() }
             }
 
-            submissionStatusCardContent.setOnClickListener { doNavigate(navDirection) }
-            submissionStatusCardContentButton.setOnClickListener { doNavigate(navDirection) }
-        }
-
-        // Test is positive
-        binding.mainTestPositive.apply {
-            val navDirection = HomeFragmentDirections
-                .actionMainFragmentToSubmissionResultPositiveOtherWarningNoConsentFragment()
-
-            submissionStatusCardPositive.setOnClickListener { doNavigate(navDirection) }
-            submissionStatusCardPositiveButton.setOnClickListener { doNavigate(navDirection) }
-        }
-
-        binding.mainTestFailed.apply {
-            setOnClickListener {
-                vm.removeTestPushed()
+            // Test is negative
+            mainTestResult.apply {
+                val toSubmissionResult = {
+                    doNavigate(HomeFragmentDirections.actionMainFragmentToSubmissionResultFragment())
+                }
+                submissionStatusCardContent.setOnClickListener { toSubmissionResult() }
+                submissionStatusCardContentButton.setOnClickListener { toSubmissionResult() }
             }
-        }
-        binding.mainTestReady.apply {
-            val navDirections = HomeFragmentDirections
-                .actionMainFragmentToSubmissionTestResultAvailableFragment()
+            // Test is positive
+            mainTestPositive.apply {
+                val toConsentScreen = {
+                    doNavigate(
+                        HomeFragmentDirections
+                            .actionMainFragmentToSubmissionResultPositiveOtherWarningNoConsentFragment()
+                    )
+                }
+                submissionStatusCardPositive.setOnClickListener { toConsentScreen() }
+                submissionStatusCardPositiveButton.setOnClickListener { toConsentScreen() }
+            }
 
-            submissionStatusCardReady.setOnClickListener { doNavigate(navDirections) }
-            submissionStatusCardReadyButton.setOnClickListener { doNavigate(navDirections) }
+            mainTestFailed.apply {
+                setOnClickListener {
+                    vm.removeTestPushed()
+                }
+            }
         }
     }
 

@@ -1,19 +1,16 @@
 package de.rki.coronawarnapp.ui.onboarding
 
-import androidx.lifecycle.asLiveData
 import com.squareup.inject.assisted.AssistedInject
 import de.rki.coronawarnapp.storage.interoperability.InteroperabilityRepository
-import de.rki.coronawarnapp.util.coroutine.DispatcherProvider
 import de.rki.coronawarnapp.util.ui.SingleLiveEvent
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModel
 import de.rki.coronawarnapp.util.viewmodel.SimpleCWAViewModelFactory
 
 class OnboardingDeltaInteroperabilityFragmentViewModel @AssistedInject constructor(
-    private val interopRepo: InteroperabilityRepository,
-    dispatcherProvider: DispatcherProvider
-) : CWAViewModel(dispatcherProvider = dispatcherProvider) {
+    private val interoperabilityRepository: InteroperabilityRepository
+) : CWAViewModel() {
 
-    val countryList = interopRepo.countryList.asLiveData(context = dispatcherProvider.Default)
+    val countryList = interoperabilityRepository.countryList
     val navigateBack = SingleLiveEvent<Boolean>()
 
     fun onBackPressed() {
@@ -21,7 +18,7 @@ class OnboardingDeltaInteroperabilityFragmentViewModel @AssistedInject construct
     }
 
     fun saveInteroperabilityUsed() {
-        interopRepo.saveInteroperabilityUsed()
+        interoperabilityRepository.saveInteroperabilityUsed()
     }
 
     @AssistedInject.Factory

@@ -15,10 +15,8 @@ data class ConfigDataContainer(
 ) : ConfigData, ConfigMapping by mappedConfig {
     override val updatedAt: Instant = serverTime.plus(localOffset)
 
-    override fun isValid(nowUTC: Instant): Boolean = if (cacheValidity == Duration.ZERO) {
-        false
-    } else {
+    override fun isValid(nowUTC: Instant): Boolean {
         val expiresAt = updatedAt.plus(cacheValidity)
-        nowUTC.isBefore(expiresAt)
+        return nowUTC.isBefore(expiresAt)
     }
 }

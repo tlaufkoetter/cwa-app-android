@@ -30,7 +30,7 @@ class TEKHistoryUpdater @Inject constructor(
         scope.launch {
             enfClient.getTEKHistoryOrRequestPermission(
                 onTEKHistoryAvailable = {
-                    updateHistoryAndTriggerCallback(it)
+                    updateHistoryAndTriggerCallback()
                 },
                 onPermissionRequired = { status ->
                     val permissionRequestTrigger: (Activity) -> Unit = {
@@ -52,20 +52,20 @@ class TEKHistoryUpdater @Inject constructor(
             return UpdateResult.UNKNOWN_RESULT
         }
         return if (resultCode == Activity.RESULT_OK) {
-            Timber.tag(TAG).d("Permission granted (== RESULT_OK): %s", data)
+            Timber.tag(TAG).w("Permission granted (== RESULT_OK): %s", data)
             updateHistoryAndTriggerCallback()
             UpdateResult.PERMISSION_AVAILABLE
         } else {
-            Timber.tag(TAG).i("Permission declined (!= RESULT_OK): %s", data)
+            Timber.tag(TAG).w("Permission declined (!= RESULT_OK): %s", data)
             callback?.onPermissionDeclined()
             UpdateResult.PERMISSION_UNAVAILABLE
         }
     }
 
-    private fun updateHistoryAndTriggerCallback(availableTEKs: List<TemporaryExposureKey>? = null) {
+    private fun updateHistoryAndTriggerCallback() {
         scope.launch {
             try {
-                val result = updateTEKHistory(availableTEKs)
+                val result = updateTEKHistory()
                 callback?.onTEKAvailable(result)
             } catch (e: Exception) {
                 callback?.onError(e)
@@ -73,11 +73,9 @@ class TEKHistoryUpdater @Inject constructor(
         }
     }
 
-    private suspend fun updateTEKHistory(
-        availableTEKs: List<TemporaryExposureKey>? = null
-    ): List<TemporaryExposureKey> {
+    private suspend fun updateTEKHistory(): List<TemporaryExposureKey> {
         val deferred = scope.async {
-            val teks = availableTEKs ?: enfClient.getTEKHistory()
+            val teks = enfClient.getTEKHistory()
             Timber.i("Permission are available, storing TEK history.")
 
             tekHistoryStorage.storeTEKData(

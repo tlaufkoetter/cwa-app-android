@@ -46,6 +46,8 @@ class SubmissionTanViewModel @AssistedInject constructor(
             Timber.w("Tried to set invalid teletan: %s", teletan)
             return
         }
+        Timber.d("Storing teletan $teletan")
+        submissionRepository.setTeletan(teletan.value)
 
         launch {
             try {

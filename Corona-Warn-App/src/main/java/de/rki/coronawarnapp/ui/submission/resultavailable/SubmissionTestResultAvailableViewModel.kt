@@ -72,9 +72,7 @@ class SubmissionTestResultAvailableViewModel @AssistedInject constructor(
     fun goConsent() {
         routeToScreen.postValue(
             SubmissionTestResultAvailableFragmentDirections
-                .actionSubmissionTestResultAvailableFragmentToSubmissionYourConsentFragment(
-                    isTestResultAvailable = true
-                )
+                .actionSubmissionTestResultAvailableFragmentToSubmissionYourConsentFragment()
         )
     }
 

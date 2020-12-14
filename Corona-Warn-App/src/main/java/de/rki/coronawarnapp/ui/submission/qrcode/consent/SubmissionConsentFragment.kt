@@ -2,7 +2,6 @@ package de.rki.coronawarnapp.ui.submission.qrcode.consent
 
 import android.os.Bundle
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import androidx.fragment.app.Fragment
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentSubmissionConsentBinding
@@ -43,10 +42,5 @@ class SubmissionConsentFragment : Fragment(R.layout.fragment_submission_consent)
         viewModel.countries.observe2(this) {
             binding.countries = it
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.contentContainer.sendAccessibilityEvent(AccessibilityEvent.TYPE_ANNOUNCEMENT)
     }
 }

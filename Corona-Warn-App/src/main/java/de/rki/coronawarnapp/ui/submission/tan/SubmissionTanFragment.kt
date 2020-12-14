@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.include_submission_tan.*
 import javax.inject.Inject
 
 /**
- * [SubmissionTanFragment] for submission via TAN entry
+ * Fragment for TAN entry
  */
 class SubmissionTanFragment : Fragment(R.layout.fragment_submission_tan), AutoInject {
 

@@ -7,6 +7,7 @@ import de.rki.coronawarnapp.exception.TransactionException
 import de.rki.coronawarnapp.exception.http.CwaWebException
 import de.rki.coronawarnapp.exception.reporting.report
 import de.rki.coronawarnapp.service.submission.QRScanResult
+import de.rki.coronawarnapp.storage.LocalData
 import de.rki.coronawarnapp.storage.SubmissionRepository
 import de.rki.coronawarnapp.ui.submission.ApiRequestState
 import de.rki.coronawarnapp.ui.submission.ScanStatus
@@ -80,8 +81,10 @@ class SubmissionQRCodeScanViewModel @AssistedInject constructor(
     private fun deregisterTestFromDevice() {
         launch {
             Timber.d("deregisterTestFromDevice()")
-
-            submissionRepository.removeTestFromDevice()
+            submissionRepository.deleteTestGUID()
+            SubmissionRepository.deleteRegistrationToken()
+            LocalData.isAllowedToSubmitDiagnosisKeys(false)
+            LocalData.initialTestResultReceivedTimestamp(0L)
 
             routeToScreen.postValue(SubmissionNavigationEvents.NavigateToMainActivity)
         }

@@ -3,7 +3,6 @@ package de.rki.coronawarnapp.risk
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.nearby.exposurenotification.ExposureWindow
-import de.rki.coronawarnapp.notification.NotificationHelper
 import de.rki.coronawarnapp.risk.RiskState.CALCULATION_FAILED
 import de.rki.coronawarnapp.risk.RiskState.INCREASED_RISK
 import de.rki.coronawarnapp.risk.RiskState.LOW_RISK
@@ -39,7 +38,6 @@ class RiskLevelChangeDetectorTest : BaseTest() {
     @MockK lateinit var notificationManagerCompat: NotificationManagerCompat
     @MockK lateinit var foregroundState: ForegroundState
     @MockK lateinit var riskLevelSettings: RiskLevelSettings
-    @MockK lateinit var notificationHelper: NotificationHelper
 
     @BeforeEach
     fun setup() {
@@ -79,8 +77,7 @@ class RiskLevelChangeDetectorTest : BaseTest() {
         riskLevelStorage = riskLevelStorage,
         notificationManagerCompat = notificationManagerCompat,
         foregroundState = foregroundState,
-        riskLevelSettings = riskLevelSettings,
-        notificationHelper = notificationHelper
+        riskLevelSettings = riskLevelSettings
     )
 
     @Test

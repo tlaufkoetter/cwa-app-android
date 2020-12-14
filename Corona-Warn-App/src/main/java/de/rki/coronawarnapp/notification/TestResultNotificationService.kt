@@ -16,15 +16,14 @@ import javax.inject.Inject
 
 class TestResultNotificationService @Inject constructor(
     @AppContext private val context: Context,
-    private val timeStamper: TimeStamper,
-    private val notificationHelper: NotificationHelper
+    private val timeStamper: TimeStamper
 ) {
 
     fun schedulePositiveTestResultReminder() {
         if (LocalData.numberOfRemainingPositiveTestResultReminders < 0) {
             Timber.v("Schedule positive test result notification")
             LocalData.numberOfRemainingPositiveTestResultReminders = POSITIVE_RESULT_NOTIFICATION_TOTAL_COUNT
-            notificationHelper.scheduleRepeatingNotification(
+            NotificationHelper.scheduleRepeatingNotification(
                 timeStamper.nowUTC.plus(POSITIVE_RESULT_NOTIFICATION_INITIAL_OFFSET),
                 POSITIVE_RESULT_NOTIFICATION_INTERVAL,
                 POSITIVE_RESULT_NOTIFICATION_ID
@@ -43,19 +42,19 @@ class TestResultNotificationService @Inject constructor(
                 .setDestination(R.id.submissionTestResultAvailableFragment)
                 .createPendingIntent()
 
-            notificationHelper.sendNotification(
+            NotificationHelper.sendNotification(
                 title = context.getString(R.string.notification_headline_share_positive_result),
                 content = context.getString(R.string.notification_body_share_positive_result),
                 notificationId = notificationId,
                 pendingIntent = pendingIntent
             )
         } else {
-            notificationHelper.cancelFutureNotifications(notificationId)
+            NotificationHelper.cancelFutureNotifications(notificationId)
         }
     }
 
     fun cancelPositiveTestResultNotification() {
-        notificationHelper.cancelFutureNotifications(POSITIVE_RESULT_NOTIFICATION_ID)
+        NotificationHelper.cancelFutureNotifications(POSITIVE_RESULT_NOTIFICATION_ID)
         Timber.v("Future positive test result notifications have been canceled")
     }
 

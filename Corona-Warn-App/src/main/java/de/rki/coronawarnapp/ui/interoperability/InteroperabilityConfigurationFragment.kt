@@ -29,7 +29,7 @@ class InteroperabilityConfigurationFragment :
     private var isNetworkCallbackRegistered = false
     private val networkCallback = object : ConnectivityHelper.NetworkCallback() {
         override fun onNetworkAvailable() {
-            vm.refreshCountries()
+            vm.getAllCountries()
         }
 
         override fun onNetworkUnavailable() {

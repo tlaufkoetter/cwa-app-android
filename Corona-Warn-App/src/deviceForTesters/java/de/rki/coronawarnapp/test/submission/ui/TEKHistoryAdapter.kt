@@ -36,17 +36,14 @@ class TEKHistoryAdapter : BaseAdapter<TEKHistoryAdapter.VH>(), AsyncDiffUtilAdap
 
         override val viewBinding = lazy { FragmentTestSubmissionTekhistoryLineBinding.bind(itemView) }
 
-        override val onBindData: FragmentTestSubmissionTekhistoryLineBinding.(item: TEKHistoryItem) -> Unit = { item ->
+        override val onBindData: FragmentTestSubmissionTekhistoryLineBinding.(key: TEKHistoryItem) -> Unit = { item ->
             val key = item.key
             primary.text = """
                 rollingStartIntervalNumber=${key.rollingStartIntervalNumber}  rollingPeriod=${key.rollingPeriod}
                 transmissionRiskLevel=${key.transmissionRiskLevel}  reportType=${key.reportType}
                 daysSinceOnsetOfSymptoms=${key.daysSinceOnsetOfSymptoms}
             """.trimIndent()
-            secondary.text = """
-                keyData=${key.keyData.toByteString().base64()}
-                obtainedAt=${item.obtainedAt}
-            """.trimIndent()
+            secondary.text = "keyData=${key.keyData.toByteString().base64()}"
         }
     }
 }
