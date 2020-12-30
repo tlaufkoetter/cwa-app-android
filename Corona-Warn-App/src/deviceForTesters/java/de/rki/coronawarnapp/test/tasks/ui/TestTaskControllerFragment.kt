@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.android.gms.safetynet.SafetyNet
 import com.google.android.material.snackbar.Snackbar
+import de.rki.coronawarnapp.BuildConfig
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentTestTaskControllerBinding
 import de.rki.coronawarnapp.test.menu.ui.TestMenuItem
@@ -13,6 +15,7 @@ import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.viewBindingLazy
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
 import de.rki.coronawarnapp.util.viewmodel.cwaViewModels
+import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("SetTextI18n")
@@ -48,8 +51,25 @@ class TestTaskControllerFragment : Fragment(R.layout.fragment_test_task_controll
             ).show()
         }
 
+        val tmp = activity
+
         binding.testTaskLaunch.setOnClickListener {
             vm.launchTestTask()
+
+            // SafetyNet PoC
+            var nonce = ByteArray(16)
+            var apiKey = "<ENTER>"
+            Timber.tag("SafetyNet").d("Requesting client...")
+            val client = SafetyNet.getClient(requireActivity())
+            Timber.tag("SafetyNet").d("Requesting attestation...")
+            client
+                .attest(nonce, apiKey)
+                .addOnSuccessListener {
+                    Timber.tag("SafetyNet").d("Attestation: %s", it.jwsResult)
+                }
+                .addOnFailureListener {
+                    Timber.tag("SafetyNet").d(it)
+                }
         }
     }
 
