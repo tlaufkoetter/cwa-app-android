@@ -1,5 +1,6 @@
 package de.rki.coronawarnapp.contactdiary.ui.overview.adapter
 
+import android.view.MotionEvent
 import android.view.ViewGroup
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.contactdiary.util.clearAndAddAll

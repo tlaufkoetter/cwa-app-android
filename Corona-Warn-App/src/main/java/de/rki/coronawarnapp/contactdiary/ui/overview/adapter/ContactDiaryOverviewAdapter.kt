@@ -1,7 +1,11 @@
 package de.rki.coronawarnapp.contactdiary.ui.overview.adapter
 
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.contactdiary.util.clearAndAddAll
 import de.rki.coronawarnapp.databinding.ContactDiaryOverviewListItemBinding
@@ -40,6 +44,17 @@ class ContactDiaryOverviewAdapter(
 
         init {
             viewBinding.value.contactDiaryOverviewNestedRecyclerView.adapter = nestedItemAdapter
+
+            viewBinding.value.contactDiaryOverviewNestedRecyclerView.removeOnItemTouchListener(object :
+                OnItemTouchListener {
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    return false
+                }
+
+                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+            })
+
         }
 
         override val onBindData: ContactDiaryOverviewListItemBinding.(item: ListItem, payloads: List<Any>) -> Unit =

@@ -1,11 +1,13 @@
 package de.rki.coronawarnapp.contactdiary.ui.overview
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.contactdiary.ui.overview.adapter.ContactDiaryOverviewAdapter
 import de.rki.coronawarnapp.contactdiary.util.getLocale
@@ -39,6 +41,16 @@ class ContactDiaryOverviewFragment : Fragment(R.layout.contact_diary_overview_fr
 
         binding.apply {
             contactDiaryOverviewRecyclerview.adapter = adapter
+
+            contactDiaryOverviewRecyclerview.addOnItemTouchListener(object :
+                RecyclerView.OnItemTouchListener {
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    return false
+                }
+
+                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+            })
 
             toolbar.setNavigationOnClickListener {
                 vm.onBackButtonPress()

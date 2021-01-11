@@ -71,6 +71,8 @@
                 android:id="@+id/contact_diary_overview_nested_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="false"
                 android:nestedScrollingEnabled="false"
                 android:paddingVertical="@dimen/spacing_tiny"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
