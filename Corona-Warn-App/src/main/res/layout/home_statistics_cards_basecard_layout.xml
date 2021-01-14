@@ -4,6 +4,8 @@
     android:id="@+id/card_container"
     android:layout_width="328dp"
     android:layout_height="300dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="4dp"
     android:backgroundTint="@color/colorSurface1"
     android:focusable="true"
     android:foreground="?selectableItemBackground"

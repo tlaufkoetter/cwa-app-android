@@ -23,6 +23,8 @@ class IncidenceCard(parent: ViewGroup) :
         item: StatisticsCardItem,
         payloads: List<Any>
     ) -> Unit = { item, payloads ->
-        item.stats as IncidenceStats
+        val stats = item.stats as IncidenceStats
+        val value = stats.keyFigures[0].value
+        viewBinding.value.valuePrimary.text = value.toString()
     }
 }
