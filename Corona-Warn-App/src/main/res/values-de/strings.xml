@@ -477,7 +477,7 @@
     <!-- XTXT: onboarding(tracing) - dialog about tracing permission declined -->
     <string name="onboarding_tracing_dialog_headline">"Berechtigung"</string>
     <!-- YMSI: onboarding(tracing) - dialog about tracing -->
-    <string name="onboarding_tracing_dialog_body">"Corona-Warn-App kann dadurch keine Benachrichtigungen zum COVID-19-Risikostatus versenden und empfangen. Sie können die Funktion jederzeit ausschalten."</string>
+    <string name="onboarding_tracing_dialog_body">"Wenn Sie die Risiko-Ermittlung nicht aktivieren, kann die App keine Benachrichtigungen zu Ihrem Risikostatus senden und empfangen. Sie können die Funktion jederzeit ausschalten."</string>
     <!-- XBUT: onboarding(tracing) - positive button (right) -->
     <string name="onboarding_tracing_dialog_button_positive">"Nicht aktivieren"</string>
     <!-- XBUT: onboarding(tracing) - negative button (right) -->
