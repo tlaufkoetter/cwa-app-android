@@ -7,6 +7,7 @@ import dagger.android.ContributesAndroidInjector
 import de.rki.coronawarnapp.contactdiary.storage.repo.ContactDiaryRepository
 import de.rki.coronawarnapp.contactdiary.ui.edit.ContactDiaryEditLocationsFragment
 import de.rki.coronawarnapp.contactdiary.ui.edit.ContactDiaryEditLocationsViewModel
+import de.rki.coronawarnapp.ui.SingleLiveEvent
 import de.rki.coronawarnapp.ui.contactdiary.DiaryData.LOCATIONS_EDIT_LIST
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -49,6 +50,13 @@ class ContactDiaryEditLocationsFragmentTest : BaseUITest() {
                 TestDispatcherProvider
             )
         )
+
+        with(viewModel) {
+            every { locationsLiveData } returns MutableLiveData()
+            every { isButtonEnabled } returns MutableLiveData()
+            every { isListVisible } returns MutableLiveData()
+            every { navigationEvent } returns SingleLiveEvent()
+        }
         setupMockViewModel(
             object : ContactDiaryEditLocationsViewModel.Factory {
                 override fun create(): ContactDiaryEditLocationsViewModel = viewModel
