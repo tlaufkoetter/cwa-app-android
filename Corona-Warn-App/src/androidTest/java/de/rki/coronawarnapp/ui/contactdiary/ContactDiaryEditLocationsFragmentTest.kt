@@ -19,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import testhelpers.BaseUITest
+import testhelpers.RetryTestRule
 import testhelpers.SCREENSHOT_DELAY_TIME
 import testhelpers.Screenshot
 import testhelpers.SystemUIDemoModeRule
@@ -37,6 +38,9 @@ class ContactDiaryEditLocationsFragmentTest : BaseUITest() {
 
     @get:Rule
     val systemUIDemoModeRule = SystemUIDemoModeRule()
+
+    @get:Rule
+    val retryTestRule = RetryTestRule(10)
 
     @MockK lateinit var contactDiaryRepository: ContactDiaryRepository
     private lateinit var viewModel: ContactDiaryEditLocationsViewModel
