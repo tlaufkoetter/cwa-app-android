@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import de.rki.coronawarnapp.R
+import de.rki.coronawarnapp.ui.main.MainActivity
 import de.rki.coronawarnapp.util.di.AppInjector
 import javax.inject.Inject
 
@@ -44,6 +46,16 @@ class ContactDiaryActivity : AppCompatActivity(), HasAndroidInjector {
         }
 
         navController.graph = graph
+
+        val navigationView = findViewById<BottomNavigationView>(R.id.bottom)
+        navigationView.selectedItemId = R.id.diary_item
+        navigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java))
+                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java))
+            }
+            true
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

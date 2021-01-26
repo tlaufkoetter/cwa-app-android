@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.contactdiary.retention.ContactDiaryWorkScheduler
+import de.rki.coronawarnapp.contactdiary.ui.ContactDiaryActivity
 import de.rki.coronawarnapp.deadman.DeadmanNotificationScheduler
 import de.rki.coronawarnapp.ui.base.startActivitySafely
 import de.rki.coronawarnapp.util.CWADebug
@@ -75,6 +77,14 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         }
         vm.showEnergyOptimizedEnabledForBackground.observe(this) {
             showEnergyOptimizedEnabledForBackground()
+        }
+
+        findViewById<BottomNavigationView>(R.id.bottom).setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java))
+                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java))
+            }
+            true
         }
     }
 
