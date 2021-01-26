@@ -6,9 +6,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/contact_diary_edit_locations_title"
-        android:focusable="true"
-        android:layout_height="match_parent">
+        android:focusable="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -30,9 +30,9 @@
         <ImageView
             android:id="@+id/contact_diary_location_list_no_items_image"
             android:layout_width="wrap_content"
-            android:focusable="true"
             android:layout_height="wrap_content"
             android:contentDescription="@string/contact_diary_edit_locations_image_content_description"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@id/contact_diary_location_list_no_items_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +44,10 @@
             android:id="@+id/contact_diary_location_list_no_items_title"
             style="@style/subtitleMedium"
             android:layout_width="0dp"
-            android:focusable="true"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/spacing_huge"
             android:layout_marginTop="@dimen/spacing_normal"
+            android:focusable="true"
             android:text="@string/contact_diary_location_list_no_items_title"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"

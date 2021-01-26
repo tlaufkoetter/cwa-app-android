@@ -12,9 +12,9 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            style="@style/CWAToolbar.Close"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/CWAToolbar.Close"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,9 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/contact_diary_edit_persons_image_content_description"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@id/contact_diary_person_list_no_items_title"
             app:layout_constraintEnd_toEndOf="parent"
-            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
@@ -46,8 +46,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/spacing_huge"
-            android:focusable="true"
             android:layout_marginTop="@dimen/spacing_normal"
+            android:focusable="true"
             android:text="@string/contact_diary_person_list_no_items_title"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,8 +66,8 @@
             app:layout_constraintBottom_toTopOf="@id/delete_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/contact_diary_edit_list_item"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:listitem="@layout/contact_diary_edit_list_item" />
 
         <android.widget.Button
             android:id="@+id/delete_button"
