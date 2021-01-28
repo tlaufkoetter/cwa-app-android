@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
@@ -49,10 +50,11 @@ class ContactDiaryActivity : AppCompatActivity(), HasAndroidInjector {
 
         val navigationView = findViewById<BottomNavigationView>(R.id.bottom)
         navigationView.selectedItemId = R.id.diary_item
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, navigationView, "bottom_bar")
         navigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java))
-                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java))
+                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java), options.toBundle())
+                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java), options.toBundle())
             }
             true
         }

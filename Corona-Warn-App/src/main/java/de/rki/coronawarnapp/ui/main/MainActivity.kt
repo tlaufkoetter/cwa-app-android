@@ -1,5 +1,6 @@
 package de.rki.coronawarnapp.ui.main
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -79,10 +81,13 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
             showEnergyOptimizedEnabledForBackground()
         }
 
-        findViewById<BottomNavigationView>(R.id.bottom).setOnNavigationItemSelectedListener {
+        val findViewById = findViewById<BottomNavigationView>(R.id.bottom)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, findViewById, "bottom_bar")
+        ActivityOptionsCompat.makeTaskLaunchBehind ()
+        findViewById.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java))
-                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java))
+                R.id.home_item -> startActivity(Intent(this, MainActivity::class.java), options.toBundle())
+                R.id.diary_item -> startActivity(Intent(this, ContactDiaryActivity::class.java), options.toBundle())
             }
             true
         }

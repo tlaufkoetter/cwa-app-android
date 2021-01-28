@@ -30,7 +30,20 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.ContactDiary" parent="MaterialAppTheme.NoActionBar" />
+    <style name="AppTheme.ContactDiary" parent="MaterialAppTheme.NoActionBar">
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/fade</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform
+        </item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform
+        </item>
+    </style>
 
     <style name="ThemeOverlay.App.ExtendedFloatingActionButton" parent="">
         <item name="colorSecondary">@color/colorAccentTintButton</item>
@@ -50,7 +63,20 @@
     </style>
 
     <!-- Main Application -->
-    <style name="AppTheme.Main" parent="AppTheme.NoActionBar" />
+    <style name="AppTheme.Main" parent="AppTheme.NoActionBar">
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/fade</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform
+        </item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform
+        </item>
+    </style>
 
     <style name="CWAToolbar" parent="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
         <item name="colorPrimary">@color/colorSurface1</item>
@@ -85,6 +111,7 @@
     <style name="diaryDialogButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/colorAccentTintButton</item>
     </style>
+
     <style name="diaryButtonNegative" parent="Widget.MaterialComponents.Button.TextButton" />
 
     <!--    Contact Diary Dialog-->
@@ -245,6 +272,7 @@
     <style name="headline5Tint" parent="@style/headline5">
         <item name="android:textColor">@color/colorTextTint</item>
     </style>
+
     <style name="headline5Bold" parent="@style/TextAppearance.MaterialComponents.Headline5">
         <item name="android:textStyle">bold</item>
     </style>
