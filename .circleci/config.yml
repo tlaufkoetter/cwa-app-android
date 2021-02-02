@@ -499,7 +499,7 @@ jobs:
           command: |
             sudo pip install -U crcmod
             sudo gsutil -m cp -R -U gs://${GOOGLE_PROJECT_ID}-circleci-android/${BUCKETDIR}/flame* firebase-results
-            when: always
+          when: always
       - store_test_results:
           path: ./firebase-results/flame-29-de_DE-portrait
       - compress-path:
