@@ -136,10 +136,10 @@ commands:
     steps:
       - run:
           name: Create emulator AVD
-          command: >
-            echo "no" | avdmanager --verbose create avd --force
-            --name "emulator_API<< parameters.apilevel >>"
-            --package "system-images;android-<< parameters.apilevel >>;google_apis;x86_64"
+          command: |
+            SYSTEM_IMAGES="system-images;android-<< parameters.apilevel >>;google_apis;x86_64"
+            sdkmanager "$SYSTEM_IMAGES"
+            echo "no" | avdmanager --verbose create avd -n avd_screenshots -k "$SYSTEM_IMAGES"
       - run:
           name: Configure emulator settings
           command: |
@@ -156,7 +156,7 @@ commands:
       - run:
           name: Start emulator AVD
           command: >
-            emulator @emulator_API<< parameters.apilevel >>
+            emulator @avd_screenshots
             -no-window
             -no-audio
             -no-boot-anim
@@ -525,8 +525,7 @@ jobs:
           name: Setup fastlane
           command: |
             bundle config set --local path 'vendor/bundle'
-            bundle update
-            bundle check
+            bundle check || bundle update
       - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
           paths:
