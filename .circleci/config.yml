@@ -521,7 +521,12 @@ jobs:
       - checkout
       - restore_cache:
           key: gem-cache-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle
+      - run:
+          name: Setup fastlane
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle update
+            bundle check
       - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
           paths:
