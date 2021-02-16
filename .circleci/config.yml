@@ -162,6 +162,10 @@ commands:
             -no-boot-anim
             -memory 2048
             -nojni
+            -delay-adb
+            -verbose
+            -gpu swiftshader_indirect
+            -no-snapshot
           background: true
           no_output_timeout: 60m
       - run:
@@ -510,9 +514,9 @@ jobs:
           destination: zips/instrumentation_tests_device.zip
 
   device_screenshots:
-    macos:
-      xcode: "12.3.0"
-    resource_class: large
+    machine:
+      image: android:202102-01
+    resource_class: xlarge
     steps:
       - checkout
       - restore_cache:
@@ -522,7 +526,6 @@ jobs:
           key: gem-cache-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - setup-android-macos
       - restore-gradle-cache
       - restore-android-build-cache-macos
       - run-gradle-cmd:
