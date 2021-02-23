@@ -588,6 +588,7 @@ jobs:
               --os-version-ids 29 \
               --locales de_DE,en_US \
               --orientations portrait \
+              --directories-to-pull /sdcard \
               --no-record-video
           no_output_timeout: 30m
       - run:

@@ -18,6 +18,7 @@ import tools.fastlane.screengrab.file.Chmod
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Locale
 
 /**
  * Waits for 2 sec and captures a screenshot
@@ -73,7 +74,7 @@ object SDCardCallback : ScreenshotCallback {
             if (!directory.exists()) {
                 directory.mkdirs()
             }
-            val screenshotFile = File(directory, screenshotName + SCREENSHOT_FORMAT)
+            val screenshotFile = File(directory, screenshotName + SCREENSHOT_FORMAT + localeName(Locale.getDefault()))
             if (!screenshotFile.exists()) {
                 screenshotFile.createNewFile()
             }
@@ -88,4 +89,12 @@ object SDCardCallback : ScreenshotCallback {
             throw RuntimeException("Unable to capture screenshot.", e)
         }
     }
+
+    private fun localeName(locale: Locale): String =
+        buildString {
+            with(locale) {
+                append(language)
+                if (country.isNotEmpty()) append("-$country")
+            }
+        }
 }
