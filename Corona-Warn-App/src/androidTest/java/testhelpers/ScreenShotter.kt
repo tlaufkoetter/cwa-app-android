@@ -93,8 +93,9 @@ object SDCardCallback : ScreenshotCallback {
     private fun localeName(locale: Locale): String =
         buildString {
             with(locale) {
+                append("_")
                 append(language)
-                if (country.isNotEmpty()) append("-$country")
+                if (country.isNotEmpty()) append("_$country")
             }
         }
 }
