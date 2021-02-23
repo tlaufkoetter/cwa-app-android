@@ -70,11 +70,11 @@ object SDCardCallback : ScreenshotCallback {
 
     override fun screenshotCaptured(screenshotName: String, screenshot: Bitmap) {
         try {
-            val directory = File(ROOT_DIRECTORY, SCREENSHOTS_DIRECTORY)
+            val directory = File(ROOT_DIRECTORY, SCREENSHOTS_DIRECTORY + localeName(Locale.getDefault()))
             if (!directory.exists()) {
                 directory.mkdirs()
             }
-            val screenshotFile = File(directory, screenshotName + SCREENSHOT_FORMAT + localeName(Locale.getDefault()))
+            val screenshotFile = File(directory, screenshotName + SCREENSHOT_FORMAT)
             if (!screenshotFile.exists()) {
                 screenshotFile.createNewFile()
             }
