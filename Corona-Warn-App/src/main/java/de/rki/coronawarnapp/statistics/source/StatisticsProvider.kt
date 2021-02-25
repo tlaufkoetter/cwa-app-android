@@ -1,6 +1,7 @@
 package de.rki.coronawarnapp.statistics.source
 
 import de.rki.coronawarnapp.statistics.StatisticsData
+import de.rki.coronawarnapp.storage.ClearableSettings
 import de.rki.coronawarnapp.util.coroutine.AppScope
 import de.rki.coronawarnapp.util.coroutine.DispatcherProvider
 import de.rki.coronawarnapp.util.device.ForegroundState
@@ -24,7 +25,7 @@ class StatisticsProvider @Inject constructor(
     private val parser: StatisticsParser,
     foregroundState: ForegroundState,
     dispatcherProvider: DispatcherProvider
-) {
+) : ClearableSettings {
 
     private val statisticsData = HotDataFlow(
         loggingTag = TAG,
@@ -88,7 +89,7 @@ class StatisticsProvider @Inject constructor(
         }
     }
 
-    fun clear() {
+    override fun clear() {
         Timber.d("clear()")
         server.clear()
         localCache.save(null)

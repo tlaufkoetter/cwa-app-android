@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.google.gson.Gson
 import de.rki.coronawarnapp.environment.BuildConfigWrap
+import de.rki.coronawarnapp.storage.ClearableSettings
 import de.rki.coronawarnapp.util.di.AppContext
 import de.rki.coronawarnapp.util.preferences.FlowPreference
 import de.rki.coronawarnapp.util.preferences.clearAndNotify
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 class DownloadDiagnosisKeysSettings @Inject constructor(
     @AppContext private val context: Context,
     @BaseGson private val gson: Gson
-) {
+) : ClearableSettings {
 
     private val prefs by lazy {
         context.getSharedPreferences("keysync_localdata", Context.MODE_PRIVATE)
@@ -44,7 +45,7 @@ class DownloadDiagnosisKeysSettings @Inject constructor(
         }
 
     @SuppressLint("ApplySharedPref")
-    fun clear() {
+    override fun clear() {
         prefs.clearAndNotify()
     }
 

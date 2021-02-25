@@ -31,6 +31,7 @@ import de.rki.coronawarnapp.task.TaskController
 import de.rki.coronawarnapp.task.internal.TaskModule
 import de.rki.coronawarnapp.test.DeviceForTestersModule
 import de.rki.coronawarnapp.ui.ActivityBinder
+import de.rki.coronawarnapp.util.DataResetModule
 import de.rki.coronawarnapp.util.coroutine.AppCoroutineScope
 import de.rki.coronawarnapp.util.coroutine.AppScope
 import de.rki.coronawarnapp.util.coroutine.CoroutineModule
@@ -72,7 +73,8 @@ import javax.inject.Singleton
         WorkerBinder::class,
         StatisticsModule::class,
         DataDonationModule::class,
-        SecurityModule::class
+        SecurityModule::class,
+        DataResetModule::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<CoronaWarnApplication> {

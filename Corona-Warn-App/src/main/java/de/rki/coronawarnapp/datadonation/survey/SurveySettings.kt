@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import de.rki.coronawarnapp.datadonation.OTPAuthorizationResult
 import de.rki.coronawarnapp.datadonation.OneTimePassword
+import de.rki.coronawarnapp.storage.ClearableSettings
 import de.rki.coronawarnapp.util.di.AppContext
 import de.rki.coronawarnapp.util.preferences.clearAndNotify
 import de.rki.coronawarnapp.util.serialization.BaseGson
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 class SurveySettings @Inject constructor(
     @AppContext val context: Context,
     @BaseGson val gson: Gson
-) {
+) : ClearableSettings {
 
     private val preferences by lazy {
         context.getSharedPreferences("survey_localdata", Context.MODE_PRIVATE)
@@ -67,7 +68,7 @@ class SurveySettings @Inject constructor(
                 .putString(KEY_OTP_RESULT, if (value == null) null else gson.toJson(value))
                 .apply()
 
-    fun clear() = preferences.clearAndNotify()
+    override fun clear() = preferences.clearAndNotify()
 }
 
 private const val KEY_OTP = "one_time_password"

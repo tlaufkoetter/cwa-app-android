@@ -3,6 +3,7 @@ package de.rki.coronawarnapp.main
 import android.content.Context
 import androidx.core.content.edit
 import de.rki.coronawarnapp.appconfig.ConfigData
+import de.rki.coronawarnapp.storage.ClearableSettings
 import de.rki.coronawarnapp.util.di.AppContext
 import de.rki.coronawarnapp.util.preferences.clearAndNotify
 import de.rki.coronawarnapp.util.preferences.createFlowPreference
@@ -17,7 +18,7 @@ import javax.inject.Inject
  */
 class CWASettings @Inject constructor(
     @AppContext val context: Context
-) {
+) : ClearableSettings {
 
     private val prefs by lazy {
         context.getSharedPreferences("cwa_main_localdata", Context.MODE_PRIVATE)
@@ -47,7 +48,7 @@ class CWASettings @Inject constructor(
         defaultValue = DEFAULT_APP_VERSION
     )
 
-    fun clear() {
+    override fun clear() {
         prefs.clearAndNotify()
     }
 

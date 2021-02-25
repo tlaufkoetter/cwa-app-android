@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class OnboardingData @Inject constructor(
     @AppContext private val context: Context
-) {
+) : ClearableSettings {
     private val prefs by lazy {
         context.getSharedPreferences("onboarding_localdata", Context.MODE_PRIVATE)
     }
@@ -38,7 +38,7 @@ class OnboardingData @Inject constructor(
         defaultValue = false
     )
 
-    fun clear() = prefs.clearAndNotify()
+    override fun clear() = prefs.clearAndNotify()
 
     companion object {
         private const val IS_ONBOARDED = "onboarding.done"
