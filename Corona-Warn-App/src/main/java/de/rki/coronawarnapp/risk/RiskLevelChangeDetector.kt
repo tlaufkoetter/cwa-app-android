@@ -44,7 +44,7 @@ class RiskLevelChangeDetector @Inject constructor(
                 Timber.v("Checking for risklevel change.")
                 check(it)
             }
-            .catch { Timber.e(it, "App config change checks failed.") }
+            .catch { Timber.e(it, "Risklevel change checks failed.") }
             .launchIn(appScope)
     }
 
