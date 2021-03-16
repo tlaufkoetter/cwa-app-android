@@ -34,4 +34,9 @@
     <string name="trace_location_checkins_remove_single_title">Wollen Sie diesen Eintrag wirklich entfernen?</string>
     <!-- XTXT: My checkin-ins: Confirmation dialog description when removing all/single items -->
     <string name="trace_location_checkins_remove_message">Sie können dann Personen, die zur selben Zeit für diesen Ort oder Event eingecheckt waren, bei Bedarf nicht mehr warnen oder von ihnen gewarnt werden.</string>
+
+    <!-- XBUT: My check-ins card: Active event, checkout button -->
+    <string name="trace_location_checkins_card_action_checkout">Jetzt auschecken</string>
+    <!-- XTXT: My check-ins card: Active event, duration label in highlight view -->
+    <string name="trace_location_checkins_card_highlight_duration_label">Dauer</string>
 </resources>
